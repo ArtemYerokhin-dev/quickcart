@@ -1,9 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'export',
-  turbopack: {
-    root: __dirname,  // ← добавь это
-  },
   images: {
     unoptimized: true,
     remotePatterns: [
