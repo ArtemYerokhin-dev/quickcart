@@ -15,14 +15,12 @@ const ProductClient = ({ id }) => {
     const [mainImage, setMainImage] = useState(null);
     const [productData, setProductData] = useState(null);
 
-    const fetchProductData = async () => {
-        const product = products.find(product => product._id === id);
-        setProductData(product);
-    }
-
     useEffect(() => {
-        fetchProductData();
-    }, [id, products.length])
+        if (products.length > 0) {
+            const product = products.find(product => product._id === id);
+            setProductData(product || null);
+        }
+    }, [id, products])
 
     return productData ? (<>
         <Navbar />
@@ -56,6 +54,7 @@ const ProductClient = ({ id }) => {
                         ))}
                     </div>
                 </div>
+
                 <div className="flex flex-col">
                     <h1 className="text-3xl font-medium text-gray-800/90 mb-4">
                         {productData.name}
