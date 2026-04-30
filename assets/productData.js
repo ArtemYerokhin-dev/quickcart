@@ -19,10 +19,10 @@ export const products = [
   },
   {
     id: 3,
-    name: "Samsung Galaxy S23",
+    name: "Vivo X300 Ultra",
     description: "Fitness Tracking, AMOLED Display",
     rating: 4.5,
-    price: "$799.99",
+    price: "$299.99",
     imgSrc: assets.samsung_s23phone_image,
   },
   {

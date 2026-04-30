@@ -26,7 +26,7 @@ import header_macbook_image from "./header_macbook_image.png";
 import macbook_image from "./macbook_image.png";
 import bose_headphone_image from "./bose_headphone_image.png";
 import apple_earphone_image from "./apple_earphone_image.png";
-import samsung_s23phone_image from "./samsung_s23phone_image.png";
+import samsung_s23phone_image from "./vivo.png";
 import venu_watch_image from "./venu_watch_image.png";
 import upload_area from "./upload_area.png";
 import cannon_camera_image from "./cannon_camera_image.png";
@@ -165,12 +165,12 @@ export const productsDummyData = [
   {
     "_id": "67a1f5663f34a77b6dde914c",
     "userId": "user_2sZFHS1UIIysJyDVzCpQhUhTIhw",
-    "name": "Samsung Galaxy S23",
-    "description": "The Samsung Galaxy S23 offers an all-encompassing mobile experience with its advanced AMOLED display, offering vibrant visuals and smooth interactions. Equipped with top-of-the-line fitness tracking features and cutting-edge technology, this phone delivers outstanding performance. With powerful hardware, a sleek design, and long battery life, the S23 is perfect for those who demand the best in mobile innovation.",
-    "price": 899.99,
-    "offerPrice": 799.99,
+    "name": "Vivo X300 Ultra",
+    "description": "Vivo X300 Ultra offers an all-encompassing mobile experience with its advanced AMOLED display, offering vibrant visuals and smooth interactions. Equipped with top-of-the-line fitness tracking features and cutting-edge technology, this phone delivers outstanding performance. With powerful hardware, a sleek design, and long battery life, the S23 is perfect for those who demand the best in mobile innovation.",
+    "price": 399.99,
+    "offerPrice": 299.99,
     "image": [
-      "https://raw.githubusercontent.com/avinashdm/gs-images/main/quickcart/xjd4eprpwqs7odbera1w.webp"
+      "https://media.discordapp.net/attachments/764109503222120518/1499489210158284800/X300_Ultra_Product_Image_Green.png?ex=69f4fba6&is=69f3aa26&hm=a2168e6e02f657bb21ab02c90b93967fec1338b7f74ae494332cca1493a3c9b6&=&format=webp&quality=lossless&width=810&height=810"
     ],
     "category": "Smartphone",
     "date": 1738667366224,
