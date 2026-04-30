@@ -1,6 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'export',
+  basePath: '/quickcart',
+  assetPrefix: '/quickcart',
   images: {
     unoptimized: true,
     remotePatterns: [
