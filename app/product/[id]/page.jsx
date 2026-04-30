@@ -7,8 +7,9 @@ export async function generateStaticParams() {
     }))
 }
 
-const Product = ({ params }) => {
-    return <ProductClient id={params.id} />
+const Product = async ({ params }) => {
+    const { id } = await params;
+    return <ProductClient id={id} />
 }
 
 export default Product;
