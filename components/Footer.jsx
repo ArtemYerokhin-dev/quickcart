@@ -47,7 +47,7 @@ const Footer = () => {
         </div>
       </div>
       <p className="py-4 text-center text-xs md:text-sm">
-        Copyright 2025 © Artem Yerokhin dev. All Right Reserved.
+        Copyright 2026 © Artem Yerokhin dev. All Right Reserved.
       </p>
     </footer>
   );

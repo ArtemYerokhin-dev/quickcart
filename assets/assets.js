@@ -170,7 +170,7 @@ export const productsDummyData = [
     "price": 399.99,
     "offerPrice": 299.99,
     "image": [
-      "https://media.discordapp.net/attachments/764109503222120518/1499489210158284800/X300_Ultra_Product_Image_Green.png?ex=69f4fba6&is=69f3aa26&hm=a2168e6e02f657bb21ab02c90b93967fec1338b7f74ae494332cca1493a3c9b6&=&format=webp&quality=lossless&width=810&height=810"
+      samsung_s23phone_image,
     ],
     "category": "Smartphone",
     "date": 1738667366224,
