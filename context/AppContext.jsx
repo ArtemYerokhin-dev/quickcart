@@ -1,6 +1,5 @@
 'use client'
 import { productsDummyData, userDummyData } from "@/assets/assets";
-import { useRouter } from "next/navigation";
 import { createContext, useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
@@ -13,7 +12,6 @@ export const useAppContext = () => {
 export const AppContextProvider = (props) => {
 
     const currency = process.env.NEXT_PUBLIC_CURRENCY
-    const router = useRouter()
 
     const [products, setProducts] = useState([])
     const [userData, setUserData] = useState(false)
@@ -110,7 +108,6 @@ export const AppContextProvider = (props) => {
         }
     }
 
-    // Load persisted data from localStorage on first render
     useEffect(() => {
         fetchProductData()
         fetchUserData()
@@ -124,7 +121,6 @@ export const AppContextProvider = (props) => {
         }
     }, [])
 
-    // Persist cart to localStorage on change
     useEffect(() => {
         if (typeof window !== 'undefined' && Object.keys(cartItems).length >= 0) {
             localStorage.setItem('qc_cart', JSON.stringify(cartItems))
@@ -132,7 +128,7 @@ export const AppContextProvider = (props) => {
     }, [cartItems])
 
     const value = {
-        currency, router,
+        currency,
         isSeller, setIsSeller,
         userData, fetchUserData,
         products, fetchProductData,

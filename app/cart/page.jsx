@@ -5,10 +5,12 @@ import OrderSummary from "@/components/OrderSummary";
 import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import { useAppContext } from "@/context/AppContext";
+import { useRouter } from "next/navigation";
 
 const Cart = () => {
 
-  const { products, router, cartItems, addToCart, updateCartQuantity, getCartCount } = useAppContext();
+  const { products, cartItems, addToCart, updateCartQuantity, getCartCount } = useAppContext();
+  const router = useRouter();
 
   return (
     <>

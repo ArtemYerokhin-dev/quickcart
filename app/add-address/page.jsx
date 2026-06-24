@@ -5,11 +5,13 @@ import Footer from "@/components/Footer";
 import Image from "next/image";
 import { useState } from "react";
 import { useAppContext } from "@/context/AppContext";
+import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
 const AddAddress = () => {
 
-    const { addAddress, router } = useAppContext()
+    const { addAddress } = useAppContext()
+    const router = useRouter()
 
     const [address, setAddress] = useState({
         fullName: '',

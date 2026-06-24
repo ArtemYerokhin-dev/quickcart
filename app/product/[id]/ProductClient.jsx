@@ -7,11 +7,13 @@ import Footer from "@/components/Footer";
 import Image from "next/image";
 import Loading from "@/components/Loading";
 import { useAppContext } from "@/context/AppContext";
+import { useRouter } from "next/navigation";
 import React from "react";
 
 const ProductClient = ({ id }) => {
 
-    const { products, router, addToCart } = useAppContext()
+    const { products, addToCart } = useAppContext()
+    const router = useRouter()
     const [mainImage, setMainImage] = useState(null);
     const [productData, setProductData] = useState(null);
 

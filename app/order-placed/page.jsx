@@ -3,10 +3,12 @@ import { assets } from '@/assets/assets'
 import { useAppContext } from '@/context/AppContext'
 import Image from 'next/image'
 import { useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 
 const OrderPlaced = () => {
 
-  const { router } = useAppContext()
+  useAppContext()
+  const router = useRouter()
 
   useEffect(() => {
     setTimeout(() => {
