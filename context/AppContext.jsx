@@ -2,6 +2,7 @@
 import { productsDummyData, userDummyData } from "@/assets/assets";
 import { useRouter } from "next/navigation";
 import { createContext, useContext, useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 export const AppContext = createContext();
 
@@ -18,6 +19,8 @@ export const AppContextProvider = (props) => {
     const [userData, setUserData] = useState(false)
     const [isSeller, setIsSeller] = useState(true)
     const [cartItems, setCartItems] = useState({})
+    const [addresses, setAddresses] = useState([])
+    const [orders, setOrders] = useState([])
 
     const fetchProductData = async () => {
         setProducts(productsDummyData)
@@ -35,6 +38,7 @@ export const AppContextProvider = (props) => {
             cartData[itemId] = 1;
         }
         setCartItems(cartData);
+        toast.success("Added to cart")
     }
 
     const updateCartQuantity = async (itemId, quantity) => {
@@ -61,15 +65,71 @@ export const AppContextProvider = (props) => {
         let totalAmount = 0;
         for (const items in cartItems) {
             let itemInfo = products.find((product) => product._id === items);
-            if (cartItems[items] > 0) {
+            if (itemInfo && cartItems[items] > 0) {
                 totalAmount += itemInfo.offerPrice * cartItems[items];
             }
         }
         return Math.floor(totalAmount * 100) / 100;
     }
 
-    useEffect(() => { fetchProductData() }, [])
-    useEffect(() => { fetchUserData() }, [])
+    const addAddress = (address) => {
+        const updated = [...addresses, address]
+        setAddresses(updated)
+        if (typeof window !== 'undefined') {
+            localStorage.setItem('qc_addresses', JSON.stringify(updated))
+        }
+    }
+
+    const placeOrder = (address) => {
+        const cartAmount = getCartAmount()
+        const tax = Math.floor(cartAmount * 0.02)
+        const items = Object.entries(cartItems)
+            .filter(([, qty]) => qty > 0)
+            .map(([id, quantity]) => ({
+                product: products.find(p => p._id === id),
+                quantity,
+            }))
+
+        const newOrder = {
+            id: Date.now().toString(),
+            items,
+            address,
+            amount: cartAmount + tax,
+            date: Date.now(),
+            status: 'Order Placed',
+            paymentMethod: 'COD',
+            paymentStatus: 'Pending',
+        }
+
+        const updated = [newOrder, ...orders]
+        setOrders(updated)
+        setCartItems({})
+        if (typeof window !== 'undefined') {
+            localStorage.setItem('qc_orders', JSON.stringify(updated))
+            localStorage.setItem('qc_cart', JSON.stringify({}))
+        }
+    }
+
+    // Load persisted data from localStorage on first render
+    useEffect(() => {
+        fetchProductData()
+        fetchUserData()
+        if (typeof window !== 'undefined') {
+            const savedCart = localStorage.getItem('qc_cart')
+            const savedAddresses = localStorage.getItem('qc_addresses')
+            const savedOrders = localStorage.getItem('qc_orders')
+            if (savedCart) setCartItems(JSON.parse(savedCart))
+            if (savedAddresses) setAddresses(JSON.parse(savedAddresses))
+            if (savedOrders) setOrders(JSON.parse(savedOrders))
+        }
+    }, [])
+
+    // Persist cart to localStorage on change
+    useEffect(() => {
+        if (typeof window !== 'undefined' && Object.keys(cartItems).length >= 0) {
+            localStorage.setItem('qc_cart', JSON.stringify(cartItems))
+        }
+    }, [cartItems])
 
     const value = {
         currency, router,
@@ -78,7 +138,9 @@ export const AppContextProvider = (props) => {
         products, fetchProductData,
         cartItems, setCartItems,
         addToCart, updateCartQuantity,
-        getCartCount, getCartAmount
+        getCartCount, getCartAmount,
+        addresses, addAddress,
+        orders, placeOrder,
     }
 
     return (

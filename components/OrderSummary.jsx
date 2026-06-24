@@ -1,31 +1,50 @@
-import { addressDummyData } from "@/assets/assets";
 import { useAppContext } from "@/context/AppContext";
 import React, { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 const OrderSummary = () => {
 
-  const { currency, router, getCartCount, getCartAmount } = useAppContext()
+  const { currency, router, getCartCount, getCartAmount, addresses, placeOrder, cartItems } = useAppContext()
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [promoCode, setPromoCode] = useState('');
+  const [discount, setDiscount] = useState(0);
 
-  const [userAddresses, setUserAddresses] = useState([]);
-
-  const fetchUserAddresses = async () => {
-    setUserAddresses(addressDummyData);
-  }
+  const PROMO_CODES = { 'SAVE10': 10, 'QUICK20': 20 }
 
   const handleAddressSelect = (address) => {
     setSelectedAddress(address);
     setIsDropdownOpen(false);
   };
 
-  const createOrder = async () => {
-
+  const applyPromo = () => {
+    const code = promoCode.trim().toUpperCase()
+    if (PROMO_CODES[code]) {
+      setDiscount(PROMO_CODES[code])
+      toast.success(`Promo applied! ${PROMO_CODES[code]}% off`)
+    } else {
+      setDiscount(0)
+      toast.error('Invalid promo code')
+    }
   }
 
-  useEffect(() => {
-    fetchUserAddresses();
-  }, [])
+  const createOrder = async () => {
+    if (!selectedAddress) {
+      toast.error('Please select a delivery address')
+      return
+    }
+    if (getCartCount() === 0) {
+      toast.error('Your cart is empty')
+      return
+    }
+    placeOrder(selectedAddress)
+    router.push('/order-placed')
+  }
+
+  const subtotal = getCartAmount()
+  const discountAmount = Math.floor(subtotal * discount / 100)
+  const tax = Math.floor((subtotal - discountAmount) * 0.02)
+  const total = subtotal - discountAmount + tax
 
   return (
     <div className="w-full md:w-96 bg-gray-500/5 p-5">
@@ -57,7 +76,10 @@ const OrderSummary = () => {
 
             {isDropdownOpen && (
               <ul className="absolute w-full bg-white border shadow-md mt-1 z-10 py-1.5">
-                {userAddresses.map((address, index) => (
+                {addresses.length === 0 && (
+                  <li className="px-4 py-2 text-gray-400 text-center">No saved addresses</li>
+                )}
+                {addresses.map((address, index) => (
                   <li
                     key={index}
                     className="px-4 py-2 hover:bg-gray-500/10 cursor-pointer"
@@ -68,7 +90,7 @@ const OrderSummary = () => {
                 ))}
                 <li
                   onClick={() => router.push("/add-address")}
-                  className="px-4 py-2 hover:bg-gray-500/10 cursor-pointer text-center"
+                  className="px-4 py-2 hover:bg-gray-500/10 cursor-pointer text-center text-orange-600 font-medium"
                 >
                   + Add New Address
                 </li>
@@ -85,12 +107,17 @@ const OrderSummary = () => {
             <input
               type="text"
               placeholder="Enter promo code"
+              value={promoCode}
+              onChange={(e) => setPromoCode(e.target.value)}
               className="flex-grow w-full outline-none p-2.5 text-gray-600 border"
             />
-            <button className="bg-orange-600 text-white px-9 py-2 hover:bg-orange-700">
+            <button onClick={applyPromo} className="bg-orange-600 text-white px-9 py-2 hover:bg-orange-700">
               Apply
             </button>
           </div>
+          {discount > 0 && (
+            <p className="text-green-600 text-sm mt-1">✓ {discount}% discount applied</p>
+          )}
         </div>
 
         <hr className="border-gray-500/30 my-5" />
@@ -98,24 +125,30 @@ const OrderSummary = () => {
         <div className="space-y-4">
           <div className="flex justify-between text-base font-medium">
             <p className="uppercase text-gray-600">Items {getCartCount()}</p>
-            <p className="text-gray-800">{currency}{getCartAmount()}</p>
+            <p className="text-gray-800">{currency}{subtotal}</p>
           </div>
+          {discount > 0 && (
+            <div className="flex justify-between text-green-600">
+              <p>Discount ({discount}%)</p>
+              <p>-{currency}{discountAmount}</p>
+            </div>
+          )}
           <div className="flex justify-between">
             <p className="text-gray-600">Shipping Fee</p>
             <p className="font-medium text-gray-800">Free</p>
           </div>
           <div className="flex justify-between">
             <p className="text-gray-600">Tax (2%)</p>
-            <p className="font-medium text-gray-800">{currency}{Math.floor(getCartAmount() * 0.02)}</p>
+            <p className="font-medium text-gray-800">{currency}{tax}</p>
           </div>
           <div className="flex justify-between text-lg md:text-xl font-medium border-t pt-3">
             <p>Total</p>
-            <p>{currency}{getCartAmount() + Math.floor(getCartAmount() * 0.02)}</p>
+            <p>{currency}{total}</p>
           </div>
         </div>
       </div>
 
-      <button onClick={createOrder} className="w-full bg-orange-600 text-white py-3 mt-5 hover:bg-orange-700">
+      <button onClick={createOrder} className="w-full bg-orange-600 text-white py-3 mt-5 hover:bg-orange-700 transition font-medium">
         Place Order
       </button>
     </div>
